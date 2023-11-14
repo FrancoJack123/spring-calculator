@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/css.css}" >
+    <title>Calculadora</title>
+</head>
+<body class="d-flex justify-content-center align-items-center flex-column" style="min-height: 100vh">
+
+    <div class="calculator card">
+        <input th:value="${numero}" type="text" id="input" class="calculator-screen z-depth-1" value="0" disabled/>
+        <div class="calculator-keys">
+            <form th:action="@{/Calculadora/Asignar/Metodo}" method="post">
+                <input type="hidden" name="operar" value="suma" >
+                <button type="submit" class="operator btn btn-info w-100" value="+">+</button>
+            </form>
+            <form th:action="@{/Calculadora/Asignar/Metodo}" method="post">
+                <input type="hidden" name="operar" value="resta" >
+                <button type="submit" class="operator btn btn-info w-100" value="-">-</button>
+            </form>
+            <form th:action="@{/Calculadora/Asignar/Metodo}" method="post">
+                <input type="hidden" name="operar" value="multiplicacion" >
+                <button type="submit" class="operator btn btn-info w-100" value="*">&times;</button>
+            </form>
+            <form th:action="@{/Calculadora/Asignar/Metodo}" method="post">
+                <input type="hidden" name="operar" value="division" >
+                <button type="submit" class="operator btn btn-info w-100" value="/">&divide;</button>
+            </form>
+
+            <div th:each="numero : ${numeros}">
+                <form th:action="@{/Calculadora/Asignar}" method="post">
+                    <input th:value="${numero}" type="hidden" name="numero" >
+                    <button type="submit" th:text="${numero}" th:value="numero" class="btn btn-light waves-effect w-100"></button>
+                </form>
+            </div>
+
+            <form th:action="@{/Calculadora/Asignar}" method="post">
+                <input value="0" type="hidden" name="numero" >
+                <button type="submit" value="0" class="btn btn-light waves-effect w-100">0</button>
+            </form>
+
+            <button type="button" class="decimal function btn btn-secondary" value=".">.</button>
+            <a th:href="@{/Calculadora/Borrar}" type="button" class="d-flex justify-content-center align-items-center btn all-clear function btn btn-danger btn-sm" value="all-clear" style="font-size: 20px;">AC</a>
+
+            <a th:href="@{/Calculadora/Calcular}" class="d-flex justify-content-center align-items-center btn equal-sign operator btn btn-default w-100" value="=" style="font-size: 25px;" >=</a>
+        </div>
+    </div>
+
+    <div class="alert alert-success mt-4" role="alert">
+        <div th:text="'Numero 1 : ' + ${a}"></div>
+        <div th:text="'Numero 2 : ' + ${b}"></div>
+        <div th:text="'Operacion : ' + ${operacion}"></div>
+    </div>
+
+    <script th:src="@{/js/script.js}"></script>
+</body>
+</html>
