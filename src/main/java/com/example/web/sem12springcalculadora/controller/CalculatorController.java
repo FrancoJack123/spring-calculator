@@ -1,5 +1,6 @@
 package com.example.web.sem12springcalculadora.controller;
 
+import com.example.web.sem12springcalculadora.model.Calculadora;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,19 +20,7 @@ public class CalculatorController {
     @Value("${server.port:8080}")
     private int port;
 
-    private Integer a;
-    private Integer b;
-    private String operacion;
-
-    public void Asignar(Integer numero){
-        if (a == null){
-            a = numero;
-            return;
-        }
-        if (b == null){
-            b = numero;
-        }
-    }
+    private Calculadora calculadora = new Calculadora();
 
     @GetMapping("/")
     public String index(Model model){
@@ -40,22 +29,22 @@ public class CalculatorController {
             numeros.add(i);
         }
         model.addAttribute("numeros", numeros);
-        model.addAttribute("a", a);
-        model.addAttribute("b", b);
-        model.addAttribute("operacion", operacion);
+        model.addAttribute("a", calculadora.getA());
+        model.addAttribute("b", calculadora.getB());
+        model.addAttribute("operacion", calculadora.getOperacion());
         return "Calculadora";
     }
 
     @PostMapping("/Asignar")
     public String OperacionNumeros(@RequestParam Integer numero, RedirectAttributes redirectAttributes){
-        this.Asignar(numero);
+        calculadora.Asignar(numero);
         redirectAttributes.addFlashAttribute("numero", numero);
         return "redirect:/Calculadora/";
     }
 
     @PostMapping("/Asignar/Metodo")
     public String OperacionNumeros(@RequestParam String operar, RedirectAttributes redirectAttributes){
-        operacion = operar;
+        calculadora.setOperacion(operar);
         redirectAttributes.addFlashAttribute("numero", "");
         return "redirect:/Calculadora/";
     }
@@ -63,51 +52,44 @@ public class CalculatorController {
     @GetMapping("/Calcular")
     public String OperacionNumeros(RedirectAttributes redirectAttributes){
 
-        if(a == null){
+        if(calculadora.getA() == null){
             return "redirect:/Calculadora/";
         }
 
-        if(b == null){
+        if(calculadora.getB() == null){
             return "redirect:/Calculadora/";
         }
 
-        if(operacion == null){
+        if(calculadora.getOperacion() == null){
             return "redirect:/Calculadora/";
         }
 
 
         int resultado = 0;
-        switch (operacion){
+        switch (calculadora.getOperacion()){
             case "suma":
-                resultado = a + b;
+                resultado = calculadora.getA() + calculadora.getB();
                 break;
             case "resta":
-                resultado = a - b;
+                resultado = calculadora.getA() - calculadora.getB();
                 break;
             case "multiplicacion":
-                resultado = a * b;
+                resultado = calculadora.getA() * calculadora.getB();
                 break;
             case "division":
-                resultado = a / b;
+                resultado = calculadora.getA() / calculadora.getB();
                 break;
         }
-        LimpiarCalculadora();
-        a=resultado;
+        calculadora.LimpiarCalculadora();
+        calculadora.setA(resultado);
         redirectAttributes.addFlashAttribute("numero", resultado);
         return "redirect:/Calculadora/";
     }
 
-    public void LimpiarCalculadora(){
-        a=null;
-        b=null;
-        operacion=null;
-    }
-
     @GetMapping("/Borrar")
     public String Borrar(){
-        LimpiarCalculadora();
+        calculadora.LimpiarCalculadora();
         return "redirect:/Calculadora/";
     }
-
 
 }
