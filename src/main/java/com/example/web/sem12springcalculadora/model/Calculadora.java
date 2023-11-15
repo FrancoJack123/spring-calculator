@@ -1,5 +1,12 @@
 package com.example.web.sem12springcalculadora.model;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
+
+@Component
+@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Calculadora {
     private Integer a;
     private Integer b;
@@ -45,3 +52,4 @@ public class Calculadora {
         operacion=null;
     }
 }
+
