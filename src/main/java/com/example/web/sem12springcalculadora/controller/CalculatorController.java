@@ -1,5 +1,6 @@
 package com.example.web.sem12springcalculadora.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/Calculadora")
 public class CalculatorController {
+
+    @Value("${server.port:8080}")
+    private int port;
+
     private Integer a;
     private Integer b;
     private String operacion;
